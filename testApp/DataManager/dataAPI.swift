@@ -6,3 +6,14 @@
 //
 
 import Foundation
+
+class DataAPI {
+    
+    static func fetchdata() -> [Data] {
+        
+        let data: [Data] = []
+        
+        return data
+        
+    }
+}
