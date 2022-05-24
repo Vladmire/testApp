@@ -1,0 +1,61 @@
+ [{
+ 		"imageName": "Luzern",
+ 		"lat": 47.050168,
+ 		"long": 8.309307,
+ 		"url": "https://pbs.twimg.com/media/DcAc-RfXkAA_8W0.jpg"
+ 	},
+ 	{
+ 		"imageName": "Zürich",
+ 		"lat": 47.376887,
+ 		"long": 8.541694,
+ 		"url": "https://img.myswitzerland.com/mys/n64493/images/buehne/st0037639.jpg"
+ 	},
+ 	{
+ 		"imageName": "Winterthur",
+ 		"lat": 47.498820,
+ 		"long": 8.723689,
+ 		"url": "https://dachlade.ch/wp-content/uploads/2016/09/Judd-Brunnen_mit_Spiegelung_in_Winterthur-update-700x463.jpg"
+ 	},
+ 	{
+ 		"imageName": "Hamburg",
+ 		"lat": 53.551085,
+ 		"long": 9.993682,
+ 		"url": "https://cdn.flixbus.de/d7files/hi_res_images/header/118_hamburg.jpg"
+ 	},
+ 	{
+ 		"imageName": "Berlin",
+ 		"lat": 52.520007,
+ 		"long": 13.404954,
+ 		"url": "https://medien.dastelefonbuch.de/tb-cms/Redakteur/Staedtelandingpage/berlin.jpg"
+ 	},
+ 	{
+ 		"imageName": "Paris",
+ 		"lat": 48.856614,
+ 		"long": 2.352222,
+ 		"url": "https://media-cdn.tripadvisor.com/media/photo-s/0d/f4/db/9e/paris-in-one-day-sightseeing.jpg"
+ 	},
+ 	{
+ 		"imageName": "Amsterdam",
+ 		"lat": 52.370216,
+ 		"long": 4.895168,
+ 		"url": "https://www.urlaubsguru.de/wp-content/uploads/2017/07/Zuiderkerk-in-Amsterdam-iStock-528503566-2_titel-1.jpg"
+ 	},
+ 	{
+ 		"imageName": "Dubai",
+ 		"lat": 25.204849,
+ 		"long": 55.270783,
+ 		"url": "https://bilder.t-online.de/b/81/13/27/44/id_81132744/610/tid_da/die-dubai-marina-2016-umrankt-von-dutzenden-wolkenkratzern.jpg"
+ 	},
+ 	{
+ 		"imageName": "Florenz",
+ 		"lat": 43.769560,
+ 		"long": 11.255814,
+ 		"url": "https://www.falstaff.at/fileadmin/_processed_/csm_florenz-skyline-c-shutterstock-2640_2cb5a402af.jpg"
+ 	},
+ 	{
+ 		"imageName": "Rom",
+ 		"lat": 41.902783,
+ 		"long": 12.496366,
+ 		"url": "https://assets.eberhardt-travel.de/2016/Italien/50176_Kolosseum_in_Rom_-_Italien_Original.jpg"
+ 	}
+ ]
