@@ -12,10 +12,10 @@ class MainViewController: UIViewController {
     private enum LayoutConstant {
         static let spacing: CGFloat = 10
     }
-    
+    private let bigImageView = HeaderCollectionView()
+    private let footerView = FooterCollectionView()
     private let cellIdentifier = "cell"
     private let data = DataAPI.fetchdata()
-    
     private let collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         let cv = UICollectionView(frame: .zero, collectionViewLayout: layout)
@@ -25,9 +25,11 @@ class MainViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         setupViews()
     }
     // MARK: - Helpers
+
     
     private func setupViews() {
         view.backgroundColor = .white
@@ -36,7 +38,7 @@ class MainViewController: UIViewController {
         collectionView.dataSource = self
         collectionView.delegate = self
         collectionView.register(CustomCollectionViewCell.self, forCellWithReuseIdentifier: cellIdentifier)
-        collectionView.edgesToSuperview()
+        collectionView.edges(to: view.safeAreaLayoutGuide)
     }
 }
 
@@ -44,6 +46,7 @@ extension MainViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellIdentifier, for: indexPath) as! CustomCollectionViewCell
         cell.update(data: data[indexPath.row])
+        
         return cell
     }
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
@@ -73,7 +76,21 @@ extension MainViewController: UICollectionViewDelegateFlowLayout {
 }
 
 extension MainViewController: UICollectionViewDelegate {
-//    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-//        <#code#>
-//    }
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        print("did select item")
+        
+        
+        view.addSubview(bigImageView)
+        view.addSubview(footerView)
+        bigImageView.top(to: view.safeAreaLayoutGuide)
+        bigImageView.leftToSuperview()
+        bigImageView.rightToSuperview()
+        bigImageView.height(UIScreen.main.bounds.size.height * 0.3)
+        
+        footerView.bottom(to: view.safeAreaLayoutGuide)
+        footerView.leftToSuperview()
+        footerView.rightToSuperview()
+        footerView.height(UIScreen.main.bounds.size.height * 0.1)
+    }
 }
+
