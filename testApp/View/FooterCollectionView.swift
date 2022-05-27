@@ -45,6 +45,7 @@ class FooterCollectionView: UIView {
         
         long.topToBottom(of: imageTitle, offset: 15)
         long.leftToRight(of: lang, offset: 15)
+        //long.rightToSuperview(offset: -15)
         long.bottomToSuperview(offset: -15)
         
 
@@ -52,5 +53,11 @@ class FooterCollectionView: UIView {
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    func update(data: Data) {
+        imageTitle.text = data.imageName
+        lang.text = "lang: \(String(data.lat))"
+        long.text = "long: \(String(data.long))"
     }
 }

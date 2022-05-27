@@ -14,8 +14,14 @@ class MainViewController: UIViewController {
     }
     private let bigImageView = HeaderCollectionView()
     private let footerView = FooterCollectionView()
+    
     private let cellIdentifier = "cell"
     private let data = DataAPI.fetchdata()
+    
+    private var headerHeight: NSLayoutConstraint!
+    private var footerHeight: NSLayoutConstraint!
+  
+
     private let collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         let cv = UICollectionView(frame: .zero, collectionViewLayout: layout)
@@ -33,20 +39,45 @@ class MainViewController: UIViewController {
     
     private func setupViews() {
         view.backgroundColor = .white
+        
         view.addSubview(collectionView)
+        view.addSubview(bigImageView)
+        view.addSubview(footerView)
+        
+        bigImageView.top(to: view.safeAreaLayoutGuide)
+        bigImageView.leftToSuperview()
+        bigImageView.rightToSuperview()
+        headerHeight = bigImageView.height(0)
         
         collectionView.dataSource = self
         collectionView.delegate = self
         collectionView.register(CustomCollectionViewCell.self, forCellWithReuseIdentifier: cellIdentifier)
-        collectionView.edges(to: view.safeAreaLayoutGuide)
+        collectionView.topToBottom(of: bigImageView)
+        collectionView.leftToSuperview()
+        collectionView.rightToSuperview()
+        collectionView.bottomToTop(of: footerView)
+        
+        footerView.bottom(to: view.safeAreaLayoutGuide)
+        footerView.leftToSuperview()
+        footerView.rightToSuperview()
+        footerHeight = footerView.height(0)
+        
+        
     }
+    
+//    private func updateHeights(headerHeight: CGFloat, footerHeight: CGFloat) -> NSLayoutConstraint {
+//        let headerHeight = bigImageView.height(0)
+//        headerHeight.constant = UIScreen.main.bounds.size.height * 0.3
+//
+//        return headerHeight
+//    }
 }
+
 
 extension MainViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellIdentifier, for: indexPath) as! CustomCollectionViewCell
         cell.update(data: data[indexPath.row])
-        
         return cell
     }
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
@@ -79,18 +110,15 @@ extension MainViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         print("did select item")
         
+        headerHeight.constant = UIScreen.main.bounds.size.height * 0.3
+        footerHeight.constant = UIScreen.main.bounds.size.height * 0.1
+        footerView.update(data: data[indexPath.row])
         
-        view.addSubview(bigImageView)
-        view.addSubview(footerView)
-        bigImageView.top(to: view.safeAreaLayoutGuide)
-        bigImageView.leftToSuperview()
-        bigImageView.rightToSuperview()
-        bigImageView.height(UIScreen.main.bounds.size.height * 0.3)
-        
-        footerView.bottom(to: view.safeAreaLayoutGuide)
-        footerView.leftToSuperview()
-        footerView.rightToSuperview()
-        footerView.height(UIScreen.main.bounds.size.height * 0.1)
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
+        headerHeight.constant = 0
+        footerHeight.constant = 0
     }
 }
 
