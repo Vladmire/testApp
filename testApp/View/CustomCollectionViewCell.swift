@@ -18,7 +18,6 @@ class CustomCollectionViewCell: UICollectionViewCell {
     override init(frame: CGRect) {
         super.init(frame: .zero)
         backgroundColor = .white
-        
         contentView.addSubview(image)
         image.edgesToSuperview()
         

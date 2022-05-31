@@ -17,6 +17,7 @@
 		6925E0AD283CE50400937655 /* Data.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6925E0AC283CE50400937655 /* Data.swift */; };
 		6925E0AF283CE5AA00937655 /* DataAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6925E0AE283CE5AA00937655 /* DataAPI.swift */; };
 		696AC667283E2A3A004B3F0A /* CustomCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 696AC666283E2A3A004B3F0A /* CustomCollectionViewCell.swift */; };
+		69DFF7BB284635CC001AC6C3 /* FullScreenViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69DFF7BA284635CC001AC6C3 /* FullScreenViewController.swift */; };
 		9BB16884EE66FB58B57513B5 /* Pods_testApp.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B9FCC264600ADED7BC4CF83C /* Pods_testApp.framework */; };
 /* End PBXBuildFile section */
 
@@ -35,6 +36,7 @@
 		6925E0AC283CE50400937655 /* Data.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Data.swift; sourceTree = "<group>"; };
 		6925E0AE283CE5AA00937655 /* DataAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataAPI.swift; sourceTree = "<group>"; };
 		696AC666283E2A3A004B3F0A /* CustomCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomCollectionViewCell.swift; sourceTree = "<group>"; };
+		69DFF7BA284635CC001AC6C3 /* FullScreenViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FullScreenViewController.swift; sourceTree = "<group>"; };
 		B9FCC264600ADED7BC4CF83C /* Pods_testApp.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_testApp.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -97,6 +99,7 @@
 			isa = PBXGroup;
 			children = (
 				6925E093283CD21200937655 /* MainViewController.swift */,
+				69DFF7BA284635CC001AC6C3 /* FullScreenViewController.swift */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -270,6 +273,7 @@
 				6925E090283CD21200937655 /* AppDelegate.swift in Sources */,
 				691EAF97283FB973002A5A46 /* FooterCollectionView.swift in Sources */,
 				691EAF95283F89FA002A5A46 /* HeaderCollectionView.swift in Sources */,
+				69DFF7BB284635CC001AC6C3 /* FullScreenViewController.swift in Sources */,
 				6925E092283CD21200937655 /* SceneDelegate.swift in Sources */,
 				6925E0AF283CE5AA00937655 /* DataAPI.swift in Sources */,
 				6925E0AD283CE50400937655 /* Data.swift in Sources */,

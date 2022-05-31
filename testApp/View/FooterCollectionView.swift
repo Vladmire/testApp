@@ -45,10 +45,7 @@ class FooterCollectionView: UIView {
         
         long.topToBottom(of: imageTitle, offset: 15)
         long.leftToRight(of: lang, offset: 15)
-        //long.rightToSuperview(offset: -15)
         long.bottomToSuperview(offset: -15)
-        
-
     }
     
     required init?(coder: NSCoder) {

@@ -18,9 +18,14 @@ class MainViewController: UIViewController {
     private let cellIdentifier = "cell"
     private let data = DataAPI.fetchdata()
     
+    private var collectionViewBottomFirst: NSLayoutConstraint!
+    private var collectionViewTopFirst: NSLayoutConstraint!
+    
+    private var collectionViewTopSecond: NSLayoutConstraint!
+    private var collectionViewBottomSecond: NSLayoutConstraint!
+    
     private var headerHeight: NSLayoutConstraint!
     private var footerHeight: NSLayoutConstraint!
-  
 
     private let collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
@@ -31,46 +36,29 @@ class MainViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         setupViews()
     }
     // MARK: - Helpers
-
-    
     private func setupViews() {
         view.backgroundColor = .white
         
         view.addSubview(collectionView)
-        view.addSubview(bigImageView)
-        view.addSubview(footerView)
-        
-        bigImageView.top(to: view.safeAreaLayoutGuide)
-        bigImageView.leftToSuperview()
-        bigImageView.rightToSuperview()
-        headerHeight = bigImageView.height(0)
         
         collectionView.dataSource = self
         collectionView.delegate = self
         collectionView.register(CustomCollectionViewCell.self, forCellWithReuseIdentifier: cellIdentifier)
-        collectionView.topToBottom(of: bigImageView)
+        
+        collectionViewTopFirst = collectionView.top(to: view.safeAreaLayoutGuide)
         collectionView.leftToSuperview()
         collectionView.rightToSuperview()
-        collectionView.bottomToTop(of: footerView)
+        collectionViewBottomFirst = collectionView.bottom(to: view.safeAreaLayoutGuide)
         
-        footerView.bottom(to: view.safeAreaLayoutGuide)
-        footerView.leftToSuperview()
-        footerView.rightToSuperview()
+        collectionViewTopSecond = collectionView.topToBottom(of: bigImageView, isActive: false)
+        collectionViewBottomSecond = collectionView.bottomToTop(of: footerView, isActive: false)
+        
+        headerHeight = bigImageView.height(0)
         footerHeight = footerView.height(0)
-        
-        
     }
-    
-//    private func updateHeights(headerHeight: CGFloat, footerHeight: CGFloat) -> NSLayoutConstraint {
-//        let headerHeight = bigImageView.height(0)
-//        headerHeight.constant = UIScreen.main.bounds.size.height * 0.3
-//
-//        return headerHeight
-//    }
 }
 
 
@@ -93,14 +81,11 @@ extension MainViewController: UICollectionViewDelegateFlowLayout {
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
-        
         return UIEdgeInsets(top: LayoutConstant.spacing , left: LayoutConstant.spacing, bottom: LayoutConstant.spacing, right: LayoutConstant.spacing)
     }
-    
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
         return LayoutConstant.spacing
     }
-    
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
         return LayoutConstant.spacing
     }
@@ -108,17 +93,62 @@ extension MainViewController: UICollectionViewDelegateFlowLayout {
 
 extension MainViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        print("did select item")
+        print("did select item at \(indexPath)")
         
-        headerHeight.constant = UIScreen.main.bounds.size.height * 0.3
-        footerHeight.constant = UIScreen.main.bounds.size.height * 0.1
-        footerView.update(data: data[indexPath.row])
+        let selectedCell: UICollectionViewCell = collectionView.cellForItem(at: indexPath)!
+        if selectedCell.contentView.backgroundColor == UIColor.gray {
+            selectedCell.contentView.backgroundColor = UIColor.clear
+            
+            headerHeight.constant = 20
+            footerHeight.constant = 20
+            UIViewPropertyAnimator(duration: 0.75, dampingRatio: 1) {
+                self.view.layoutIfNeeded()
+            }.startAnimation()
+            
+            collectionViewTopSecond.isActive = false
+            collectionViewBottomSecond.isActive = false
+            
+            collectionViewTopFirst.isActive = true
+            collectionViewBottomFirst.isActive = true
+            bigImageView.removeFromSuperview()
+            footerView.removeFromSuperview()
+        } else {
+            
+            view.addSubview(bigImageView)
+            view.addSubview(footerView)
+            
+            bigImageView.isUserInteractionEnabled = true
+            bigImageView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(handleTap)))
+            
+            collectionViewTopFirst.isActive = false
+            collectionViewBottomFirst.isActive = false
+            
+            collectionViewTopSecond.isActive = true
+            collectionViewBottomSecond.isActive = true
+            
+            bigImageView.edgesToSuperview(excluding: .bottom, usingSafeArea: true)
+            footerView.edgesToSuperview(excluding: .top, usingSafeArea: true)
+            
+            selectedCell.contentView.backgroundColor = UIColor.gray
+            self.headerHeight.constant = UIScreen.main.bounds.size.height * 0.3
+            self.footerHeight.constant = UIScreen.main.bounds.size.height * 0.1
+            UIViewPropertyAnimator(duration: 0.75, dampingRatio: 1) {
+                self.view.layoutIfNeeded()
+            }.startAnimation()
+            footerView.update(data: data[indexPath.row])
+        }
+    }
+    
+    
+    func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
+        
+        let cellToDeselect: UICollectionViewCell = collectionView.cellForItem(at: indexPath)!
+        cellToDeselect.contentView.backgroundColor = UIColor.clear
+        
         
     }
     
-    func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
-        headerHeight.constant = 0
-        footerHeight.constant = 0
+    @objc func handleTap() {
+        print("hello world!")
     }
 }
-
