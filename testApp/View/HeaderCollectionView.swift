@@ -18,8 +18,6 @@ class HeaderCollectionView: UIView {
         return img
     }()
     
-    
-    
     override init(frame: CGRect) {
         super.init(frame: frame)
         
@@ -35,9 +33,7 @@ class HeaderCollectionView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func update(currentData: Data) {
+    func update(currentData: Info) {
         imageView.image = UIImage(named: currentData.imageName)
     }
-    
-    
 }

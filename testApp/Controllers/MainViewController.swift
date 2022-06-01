@@ -12,32 +12,85 @@ class MainViewController: UIViewController {
     private enum LayoutConstant {
         static let spacing: CGFloat = 10
     }
+    // views
     private let bigImageView = HeaderCollectionView()
     private let footerView = FooterCollectionView()
-    
-    private let cellIdentifier = "cell"
-    private let data = DataAPI.fetchdata()
-    
-    private var collectionViewBottomFirst: NSLayoutConstraint!
-    private var collectionViewTopFirst: NSLayoutConstraint!
-    
-    private var collectionViewTopSecond: NSLayoutConstraint!
-    private var collectionViewBottomSecond: NSLayoutConstraint!
-    
-    private var headerHeight: NSLayoutConstraint!
-    private var footerHeight: NSLayoutConstraint!
-
     private let collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         let cv = UICollectionView(frame: .zero, collectionViewLayout: layout)
         cv.backgroundColor = .white
         return cv
     }()
-
+    // data
+    private let cellIdentifier = "cell"
+    private let data = DataAPI.fetchdata()
+    
+    // constraints
+    private var collectionViewBottomFirst: Constraint!
+    private var collectionViewTopFirst: Constraint!
+    
+    private var collectionViewTopSecond: Constraint!
+    private var collectionViewBottomSecond: Constraint!
+    private var collectionViewLeft: Constraint!
+    private var collectionViewRight: Constraint!
+    
+    private var bigImageEdges: Constraints!
+    private var footerEdges: Constraints!
+    
+    private var headerHeight: Constraint!
+    private var footerHeight: Constraint!
+    
+//    private var portraitConstraints: Constraints!
+//    private var landscapeConstraints: Constraints!
+//
+//    private var CVLandscapeTop: Constraint!
+//    private var CVLandscapeBottom: Constraint!
+//
+//
+//    private var CVLandscapeLeft: Constraint!
+//    private var CVLandscapeRight: Constraint!
+//    private var CVLandscapeLeftSecond: Constraint!
+//
+//    private var BILandscapeEdges: Constraints!
+//    private var FTLandscapeEdges: Constraints!
+//    private var FTLandscapeLeft: Constraint!
+//
+//    private var BILandscapewidth: Constraint!
+//    private var FTHeight: Constraint!
+//    private var FTLandscapeLeftSecond: Constraint!
+    
+    
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         setupViews()
     }
+    
+    //landscape mode
+//    override func willTransition(to newCollection: UITraitCollection, with coordinator: UIViewControllerTransitionCoordinator) {
+//        if let interfaceOrientation = UIApplication.shared.windows.first(where: {$0.isKeyWindow})?.windowScene?.interfaceOrientation {
+//            switch interfaceOrientation {
+//            case .portrait:
+//                fallthrough
+//            case .portraitUpsideDown:
+//                landscapeConstraints.deActivate()
+//                portraitConstraints.activate()
+//                break
+//            case .landscapeLeft:
+//                fallthrough
+//            case .landscapeRight:
+//                portraitConstraints.deActivate()
+//                landscapeConstraints.activate()
+//                break
+//            case .unknown:
+//                fallthrough
+//            @unknown default:
+//                print("unknown orientation")
+//                break
+//            }
+//        }
+//    }
     // MARK: - Helpers
     private func setupViews() {
         view.backgroundColor = .white
@@ -49,8 +102,8 @@ class MainViewController: UIViewController {
         collectionView.register(CustomCollectionViewCell.self, forCellWithReuseIdentifier: cellIdentifier)
         
         collectionViewTopFirst = collectionView.top(to: view.safeAreaLayoutGuide)
-        collectionView.leftToSuperview()
-        collectionView.rightToSuperview()
+        collectionViewLeft = collectionView.leftToSuperview()
+        collectionViewRight = collectionView.rightToSuperview()
         collectionViewBottomFirst = collectionView.bottom(to: view.safeAreaLayoutGuide)
         
         collectionViewTopSecond = collectionView.topToBottom(of: bigImageView, isActive: false)
@@ -58,6 +111,19 @@ class MainViewController: UIViewController {
         
         headerHeight = bigImageView.height(0)
         footerHeight = footerView.height(0)
+        
+//        portraitConstraints = [collectionViewBottomFirst, collectionViewTopFirst, collectionViewTopSecond, collectionViewBottomSecond, collectionViewLeft, collectionViewRight, headerHeight, footerHeight]
+        
+//        CVLandscapeTop = collectionView.top(to: view.safeAreaLayoutGuide)
+//        CVLandscapeBottom = collectionView.bottom(to: view.safeAreaLayoutGuide)
+//        CVLandscapeLeft = collectionView.leftToSuperview()
+//        CVLandscapeRight = collectionView.rightToSuperview()
+//        CVLandscapeLeftSecond = collectionView.leftToRight(of: bigImageView)
+//
+//        BILandscapewidth = bigImageView.width(0)
+//        FTHeight = footerView.height(0)
+//
+//        landscapeConstraints = [CVLandscapeTop, CVLandscapeBottom, CVLandscapeLeft, CVLandscapeRight, CVLandscapeLeftSecond, BILandscapewidth, FTHeight]
     }
 }
 
@@ -99,8 +165,8 @@ extension MainViewController: UICollectionViewDelegate {
         if selectedCell.contentView.backgroundColor == UIColor.gray {
             selectedCell.contentView.backgroundColor = UIColor.clear
             
-            headerHeight.constant = 20
-            footerHeight.constant = 20
+            headerHeight.constant = 0
+            footerHeight.constant = 0
             UIViewPropertyAnimator(duration: 0.75, dampingRatio: 1) {
                 self.view.layoutIfNeeded()
             }.startAnimation()
@@ -126,8 +192,11 @@ extension MainViewController: UICollectionViewDelegate {
             collectionViewTopSecond.isActive = true
             collectionViewBottomSecond.isActive = true
             
-            bigImageView.edgesToSuperview(excluding: .bottom, usingSafeArea: true)
-            footerView.edgesToSuperview(excluding: .top, usingSafeArea: true)
+            bigImageEdges = bigImageView.edgesToSuperview(excluding: .bottom, usingSafeArea: true)
+            footerEdges = footerView.edgesToSuperview(excluding: .top, usingSafeArea: true)
+            
+//            portraitConstraints.append(contentsOf: bigImageEdges)
+//            portraitConstraints.append(contentsOf: footerEdges)
             
             selectedCell.contentView.backgroundColor = UIColor.gray
             self.headerHeight.constant = UIScreen.main.bounds.size.height * 0.3
@@ -149,6 +218,7 @@ extension MainViewController: UICollectionViewDelegate {
     }
     
     @objc func handleTap() {
-        print("hello world!")
+        let fullVC = FullScreenViewController(currentData: data[1])
+        present(fullVC, animated: true, completion: nil)
     }
 }

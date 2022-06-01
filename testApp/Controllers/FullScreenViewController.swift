@@ -11,9 +11,9 @@ import WebKit
 class FullScreenViewController: UIViewController, WKUIDelegate {
     
     private var webView: WKWebView!
-    private var currentData: Data
+    private var currentData: Info
     
-    init(currentData: Data) {
+    init(currentData: Info) {
         self.currentData = currentData
         super.init(nibName: nil, bundle: nil)
     }
@@ -37,9 +37,5 @@ class FullScreenViewController: UIViewController, WKUIDelegate {
         }
         let myRequest = URLRequest(url: myURL)
         webView.load(myRequest)
-    }
-    
-    func update(data: Data) {
-        currentData = data
     }
 }

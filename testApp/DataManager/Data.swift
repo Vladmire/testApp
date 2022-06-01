@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct Data: Decodable, Hashable {
+struct Info: Decodable, Hashable {
     let imageName: String
     let lat: Float
     let long: Float

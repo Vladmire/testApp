@@ -6,48 +6,49 @@
 //
 
 import Foundation
+import UIKit
 
 class DataAPI {
     
-    static func fetchdata() -> [Data] {
+    static func fetchdata() -> [Info] {
+        var data: [Info] = []
+        let fileName = "imageData"
         
-        let data = [Data(imageName: "Luzern", lat: 47.050168, long: 8.309307, url: "https://pbs.twimg.com/media/DcAc-RfXkAA_8W0.jpg"),
-                    Data(imageName: "Zürich", lat: 47.376887, long: 8.541694, url: "https://img.myswitzerland.com/mys/n64493/images/buehne/st0037639.jpg"),
-                    Data(imageName: "Winterthur", lat: 47.498820, long: 8.723689, url: "https://dachlade.ch/wp-content/uploads/2016/09/Judd-Brunnen_mit_Spiegelung_in_Winterthur-update-700x463.jpg"),
-                    Data(imageName: "Luzern", lat: 47.050168, long: 8.309307, url: "https://pbs.twimg.com/media/DcAc-RfXkAA_8W0.jpg"),
-                    Data(imageName: "Zürich", lat: 47.376887, long: 8.541694, url: "https://img.myswitzerland.com/mys/n64493/images/buehne/st0037639.jpg"),
-                    Data(imageName: "Winterthur", lat: 47.498820, long: 8.723689, url: "https://dachlade.ch/wp-content/uploads/2016/09/Judd-Brunnen_mit_Spiegelung_in_Winterthur-update-700x463.jpg"),
-                    Data(imageName: "Luzern", lat: 47.050168, long: 8.309307, url: "https://pbs.twimg.com/media/DcAc-RfXkAA_8W0.jpg"),
-                    Data(imageName: "Zürich", lat: 47.376887, long: 8.541694, url: "https://img.myswitzerland.com/mys/n64493/images/buehne/st0037639.jpg"),
-                    Data(imageName: "Winterthur", lat: 47.498820, long: 8.723689, url: "https://dachlade.ch/wp-content/uploads/2016/09/Judd-Brunnen_mit_Spiegelung_in_Winterthur-update-700x463.jpg")]
-//                    Data(imageName: "Luzern", lat: 47.050168, long: 8.309307, url: "https://pbs.twimg.com/media/DcAc-RfXkAA_8W0.jpg"),
-//                    Data(imageName: "Zürich", lat: 47.376887, long: 8.541694, url: "https://img.myswitzerland.com/mys/n64493/images/buehne/st0037639.jpg"),
-//                    Data(imageName: "Winterthur", lat: 47.498820, long: 8.723689, url: "https://dachlade.ch/wp-content/uploads/2016/09/Judd-Brunnen_mit_Spiegelung_in_Winterthur-update-700x463.jpg"),
-//                    Data(imageName: "Luzern", lat: 47.050168, long: 8.309307, url: "https://pbs.twimg.com/media/DcAc-RfXkAA_8W0.jpg"),
-//                    Data(imageName: "Zürich", lat: 47.376887, long: 8.541694, url: "https://img.myswitzerland.com/mys/n64493/images/buehne/st0037639.jpg"),
-//                    Data(imageName: "Winterthur", lat: 47.498820, long: 8.723689, url: "https://dachlade.ch/wp-content/uploads/2016/09/Judd-Brunnen_mit_Spiegelung_in_Winterthur-update-700x463.jpg"),
-//                    Data(imageName: "Luzern", lat: 47.050168, long: 8.309307, url: "https://pbs.twimg.com/media/DcAc-RfXkAA_8W0.jpg"),
-//                    Data(imageName: "Zürich", lat: 47.376887, long: 8.541694, url: "https://img.myswitzerland.com/mys/n64493/images/buehne/st0037639.jpg"),
-//                    Data(imageName: "Winterthur", lat: 47.498820, long: 8.723689, url: "https://dachlade.ch/wp-content/uploads/2016/09/Judd-Brunnen_mit_Spiegelung_in_Winterthur-update-700x463.jpg"),
-//                    Data(imageName: "Luzern", lat: 47.050168, long: 8.309307, url: "https://pbs.twimg.com/media/DcAc-RfXkAA_8W0.jpg"),
-//                    Data(imageName: "Zürich", lat: 47.376887, long: 8.541694, url: "https://img.myswitzerland.com/mys/n64493/images/buehne/st0037639.jpg"),
-//                    Data(imageName: "Winterthur", lat: 47.498820, long: 8.723689, url: "https://dachlade.ch/wp-content/uploads/2016/09/Judd-Brunnen_mit_Spiegelung_in_Winterthur-update-700x463.jpg"),
-//                    Data(imageName: "Luzern", lat: 47.050168, long: 8.309307, url: "https://pbs.twimg.com/media/DcAc-RfXkAA_8W0.jpg"),
-//                    Data(imageName: "Zürich", lat: 47.376887, long: 8.541694, url: "https://img.myswitzerland.com/mys/n64493/images/buehne/st0037639.jpg"),
-//                    Data(imageName: "Winterthur", lat: 47.498820, long: 8.723689, url: "https://dachlade.ch/wp-content/uploads/2016/09/Judd-Brunnen_mit_Spiegelung_in_Winterthur-update-700x463.jpg")]
-        
-        
-//        let data: [Data] = []
-//        let decoder = JSONDecoder()
-//        do {
-//            let fetchedData = try decoder.decode([Data].self, from: )
-//        } catch(let error) {
-//            print(error)
-//        }
+        if let path = Bundle.main.path(forResource: fileName, ofType: "json") {
+            do {
+                guard let jsonData = try String(contentsOfFile: path).data(using: .utf8) else {
+                    print("can't read the file")
+                    return data
+                }
+                let decoder = JSONDecoder()
+                data = try decoder.decode([Info].self, from: jsonData)
+            } catch {
+                print("error \(error)")
+            }
+        }
         return data
     }
     
-    static func fetchImages() {
-        
+    
+    
+    func getData(from url: URL, completion: @escaping (Data?, URLResponse?, Error?) -> ()) {
+        URLSession.shared.dataTask(with: url, completionHandler: completion).resume()
     }
+    
+    func downloadImage(from url: String) {
+        print("download started")
+        guard let url = URL(string: url) else {
+            return
+        }
+        getData(from: url) { data, response, error in
+            guard let data = data, error == nil else {
+                return
+            }
+//            DispatchQueue.main.async() { [weak self] in
+//                self?.imageView.image = UIImage(data: data)
+//            }
+        }
+    }
+    
+    
 }

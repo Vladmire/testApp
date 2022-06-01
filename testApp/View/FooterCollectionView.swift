@@ -52,7 +52,7 @@ class FooterCollectionView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func update(data: Data) {
+    func update(data: Info) {
         imageTitle.text = data.imageName
         lang.text = "lang: \(String(data.lat))"
         long.text = "long: \(String(data.long))"
