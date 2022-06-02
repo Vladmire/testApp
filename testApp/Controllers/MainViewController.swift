@@ -9,9 +9,12 @@ import TinyConstraints
 
 class MainViewController: UIViewController {
     
-    private enum LayoutConstant {
-        static let spacing: CGFloat = 10
-    }
+    
+    // data
+    private let cellIdentifier = "cell"
+    private var data = DataAPI.shared.createFullInfo()
+    
+    
     // views
     private let bigImageView = HeaderCollectionView()
     private let footerView = FooterCollectionView()
@@ -21,11 +24,10 @@ class MainViewController: UIViewController {
         cv.backgroundColor = .white
         return cv
     }()
-    // data
-    private let cellIdentifier = "cell"
-    private let data = DataAPI.fetchdata()
-    
     // constraints
+    private enum LayoutConstant {
+        static let spacing: CGFloat = 10
+    }
     private var collectionViewBottomFirst: Constraint!
     private var collectionViewTopFirst: Constraint!
     
@@ -59,12 +61,21 @@ class MainViewController: UIViewController {
 //    private var FTHeight: Constraint!
 //    private var FTLandscapeLeftSecond: Constraint!
     
-    
-    
-    
+//    func update(data: [FullInfo]) {
+//        self.data = data
+//    }
     override func viewDidLoad() {
         super.viewDidLoad()
         setupViews()
+        
+        DataAPI.shared.downloadImage(data: data, completion: { [weak self] result in
+            
+            DispatchQueue.main.async {
+                let download = result
+                self?.data = download
+                self?.collectionView.reloadData()
+            }
+        })
     }
     
     //landscape mode
@@ -125,6 +136,7 @@ class MainViewController: UIViewController {
 //
 //        landscapeConstraints = [CVLandscapeTop, CVLandscapeBottom, CVLandscapeLeft, CVLandscapeRight, CVLandscapeLeftSecond, BILandscapewidth, FTHeight]
     }
+    
 }
 
 
@@ -205,6 +217,7 @@ extension MainViewController: UICollectionViewDelegate {
                 self.view.layoutIfNeeded()
             }.startAnimation()
             footerView.update(data: data[indexPath.row])
+            bigImageView.update(currentData: data[indexPath.row])
         }
     }
     
@@ -213,8 +226,6 @@ extension MainViewController: UICollectionViewDelegate {
         
         let cellToDeselect: UICollectionViewCell = collectionView.cellForItem(at: indexPath)!
         cellToDeselect.contentView.backgroundColor = UIColor.clear
-        
-        
     }
     
     @objc func handleTap() {

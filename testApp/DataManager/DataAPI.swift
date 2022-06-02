@@ -10,10 +10,11 @@ import UIKit
 
 class DataAPI {
     
-    static func fetchdata() -> [Info] {
+    static let shared = DataAPI()
+    
+    private func fetchdata() -> [Info] {
         var data: [Info] = []
         let fileName = "imageData"
-        
         if let path = Bundle.main.path(forResource: fileName, ofType: "json") {
             do {
                 guard let jsonData = try String(contentsOfFile: path).data(using: .utf8) else {
@@ -29,26 +30,51 @@ class DataAPI {
         return data
     }
     
+    func createFullInfo() -> [FullInfo] {
+        var fullInfos: [FullInfo] = []
+        let infos = fetchdata()
+        for info in infos {
+            guard let image = UIImage(named: "imageIcon") else {
+                return fullInfos
+            }
+            let fullInfo = FullInfo(imageName: info.imageName, lat: info.lat, long: info.long, url: info.url, image: image)
+            fullInfos.append(fullInfo)
+        }
+        return fullInfos
+    }
+    
     
     
     func getData(from url: URL, completion: @escaping (Data?, URLResponse?, Error?) -> ()) {
         URLSession.shared.dataTask(with: url, completionHandler: completion).resume()
     }
     
-    func downloadImage(from url: String) {
-        print("download started")
-        guard let url = URL(string: url) else {
-            return
-        }
-        getData(from: url) { data, response, error in
-            guard let data = data, error == nil else {
-                return
+    func downloadImage(data: [FullInfo], completion: @escaping([FullInfo]) -> ()) {
+        let group = DispatchGroup()
+        
+        var downloadedInfo = data
+            for (index, datum) in data.enumerated() {
+                group.enter()
+                if let url = URL(string: datum.url) {
+                    DispatchQueue.global(qos: .utility).async {
+                    print("download started \(index)")
+                    self.getData(from: url) { data, response, error in
+                        guard let data = data, error == nil else {
+                            print("download failed \(index)")
+                            group.leave()
+                            return
+                        }
+                        print("download finished \(index)")
+                        downloadedInfo[index].image = UIImage(data: data)
+                        group.leave()
+                        
+                    }
+                }
             }
-//            DispatchQueue.main.async() { [weak self] in
-//                self?.imageView.image = UIImage(data: data)
-//            }
         }
+        group.notify(queue: .global(qos: .utility)) {
+            completion(downloadedInfo)
+        }
+            
     }
-    
-    
 }

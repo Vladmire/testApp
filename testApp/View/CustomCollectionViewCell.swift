@@ -27,8 +27,8 @@ class CustomCollectionViewCell: UICollectionViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func update(data: Info) {
-        image.image = UIImage(named: "imageIcon")
+    func update(data: FullInfo) {
+        image.image = data.image
         image.tintColor = .black
     }
 }

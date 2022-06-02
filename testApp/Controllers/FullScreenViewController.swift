@@ -11,9 +11,9 @@ import WebKit
 class FullScreenViewController: UIViewController, WKUIDelegate {
     
     private var webView: WKWebView!
-    private var currentData: Info
+    private var currentData: FullInfo
     
-    init(currentData: Info) {
+    init(currentData: FullInfo) {
         self.currentData = currentData
         super.init(nibName: nil, bundle: nil)
     }

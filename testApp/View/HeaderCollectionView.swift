@@ -33,7 +33,7 @@ class HeaderCollectionView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func update(currentData: Info) {
-        imageView.image = UIImage(named: currentData.imageName)
+    func update(currentData: FullInfo) {
+        imageView.image = currentData.image
     }
 }
