@@ -5,7 +5,6 @@
 //  Created by imac44 on 24.05.2022.
 //
 
-import Foundation
 import UIKit
 
 class DataAPI {
@@ -43,38 +42,26 @@ class DataAPI {
         return fullInfos
     }
     
-    
+    func downloadImage(data: FullInfo, completion: @escaping(FullInfo) -> ()) {
+        var downloadedInfo = data
+        if let url = URL(string: data.url) {
+            DispatchQueue.global(qos: .utility).async {
+            print("download started")
+            self.getData(from: url) { data, response, error in
+                guard let data = data, error == nil else {
+                    print("download failed")
+                    return
+                }
+                print("download finished")
+                downloadedInfo.image = UIImage(data: data)
+                completion(downloadedInfo)
+                }
+            }
+        }
+    }
     
     func getData(from url: URL, completion: @escaping (Data?, URLResponse?, Error?) -> ()) {
         URLSession.shared.dataTask(with: url, completionHandler: completion).resume()
     }
     
-    func downloadImage(data: [FullInfo], completion: @escaping([FullInfo]) -> ()) {
-        let group = DispatchGroup()
-        
-        var downloadedInfo = data
-            for (index, datum) in data.enumerated() {
-                group.enter()
-                if let url = URL(string: datum.url) {
-                    DispatchQueue.global(qos: .utility).async {
-                    print("download started \(index)")
-                    self.getData(from: url) { data, response, error in
-                        guard let data = data, error == nil else {
-                            print("download failed \(index)")
-                            group.leave()
-                            return
-                        }
-                        print("download finished \(index)")
-                        downloadedInfo[index].image = UIImage(data: data)
-                        group.leave()
-                        
-                    }
-                }
-            }
-        }
-        group.notify(queue: .global(qos: .utility)) {
-            completion(downloadedInfo)
-        }
-            
-    }
 }

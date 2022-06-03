@@ -13,6 +13,7 @@ class HeaderCollectionView: UIView {
         let img = UIImageView()
         img.image = UIImage(named: "imageIcon")
         img.contentMode = .scaleAspectFit
+         
         img.clipsToBounds = true
         img.tintColor = .black
         return img
@@ -23,10 +24,7 @@ class HeaderCollectionView: UIView {
         
         addSubview(imageView)
         backgroundColor = .white
-        imageView.leftToSuperview()
-        imageView.rightToSuperview()
-        imageView.topToSuperview(offset: 10)
-        imageView.bottomToSuperview(offset: -10)
+        imageView.edgesToSuperview(insets: .left(10) + .top(10) + .right(10) + .bottom(10))
     }
     
     required init?(coder: NSCoder) {
@@ -35,5 +33,9 @@ class HeaderCollectionView: UIView {
     
     func update(currentData: FullInfo) {
         imageView.image = currentData.image
+        if currentData.image != UIImage(named: "imageIcon") {
+            imageView.contentMode = .scaleAspectFill
+        }
+        
     }
 }

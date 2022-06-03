@@ -11,7 +11,8 @@ class CustomCollectionViewCell: UICollectionViewCell {
     
     let image: UIImageView = {
         let img = UIImageView()
-        img.contentMode = .scaleToFill
+        img.contentMode = .scaleAspectFill
+        img.clipsToBounds = true
         return img
     }()
     
@@ -19,7 +20,7 @@ class CustomCollectionViewCell: UICollectionViewCell {
         super.init(frame: .zero)
         backgroundColor = .white
         contentView.addSubview(image)
-        image.edgesToSuperview()
+        image.edgesToSuperview(insets: .left(10) + .top(10) + .right(10) + .bottom(10))
         
     }
     
@@ -27,8 +28,20 @@ class CustomCollectionViewCell: UICollectionViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func update(data: FullInfo) {
+//    override func prepareForReuse() {
+//        super.prepareForReuse()
+//        task.cancel()
+//    }
+    
+    func update(data: FullInfo, completion: @escaping(FullInfo) -> ()) {
         image.image = data.image
+        DataAPI.shared.downloadImage(data: data, completion: { [weak self] result in
+            DispatchQueue.main.async {
+                self?.image.image = result.image
+                completion(result)
+            }
+        })
+    
         image.tintColor = .black
     }
 }

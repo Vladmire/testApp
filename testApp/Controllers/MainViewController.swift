@@ -6,16 +6,15 @@
 //
 
 import TinyConstraints
+import Network
 
 class MainViewController: UIViewController {
-    
-    
     // data
     private let cellIdentifier = "cell"
     private var data = DataAPI.shared.createFullInfo()
-    
-    
+    private let monitor = NWPathMonitor()
     // views
+    var fullVC: FullScreenViewController!
     private let bigImageView = HeaderCollectionView()
     private let footerView = FooterCollectionView()
     private let collectionView: UICollectionView = {
@@ -26,7 +25,7 @@ class MainViewController: UIViewController {
     }()
     // constraints
     private enum LayoutConstant {
-        static let spacing: CGFloat = 10
+        static let spacing: CGFloat = 0
     }
     private var collectionViewBottomFirst: Constraint!
     private var collectionViewTopFirst: Constraint!
@@ -41,7 +40,6 @@ class MainViewController: UIViewController {
     
     private var headerHeight: Constraint!
     private var footerHeight: Constraint!
-    
 //    private var portraitConstraints: Constraints!
 //    private var landscapeConstraints: Constraints!
 //
@@ -60,22 +58,27 @@ class MainViewController: UIViewController {
 //    private var BILandscapewidth: Constraint!
 //    private var FTHeight: Constraint!
 //    private var FTLandscapeLeftSecond: Constraint!
+
     
-//    func update(data: [FullInfo]) {
-//        self.data = data
-//    }
     override func viewDidLoad() {
         super.viewDidLoad()
         setupViews()
         
-        DataAPI.shared.downloadImage(data: data, completion: { [weak self] result in
-            
-            DispatchQueue.main.async {
-                let download = result
-                self?.data = download
-                self?.collectionView.reloadData()
+        title = "Main screen"
+        
+        monitor.pathUpdateHandler = { path in
+            if path.status == .satisfied {
+                print("We're connected!")
+            } else {
+                let alertController = UIAlertController(title: "Oops", message: "No Ethernet connection!", preferredStyle: .alert)
+                let alertAction = UIAlertAction(title: "OK", style: .default, handler: nil)
+                alertController.addAction(alertAction)
+                self.present(alertController, animated: true, completion: nil)
             }
-        })
+            print(path.isExpensive)
+        }
+        let queue = DispatchQueue(label: "Monitor")
+        monitor.start(queue: queue)
     }
     
     //landscape mode
@@ -102,6 +105,7 @@ class MainViewController: UIViewController {
 //            }
 //        }
 //    }
+    
     // MARK: - Helpers
     private func setupViews() {
         view.backgroundColor = .white
@@ -143,7 +147,9 @@ class MainViewController: UIViewController {
 extension MainViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellIdentifier, for: indexPath) as! CustomCollectionViewCell
-        cell.update(data: data[indexPath.row])
+        cell.update(data: data[indexPath.row], completion: { [weak self] result in
+            self?.data[indexPath.row] = result
+        })
         return cell
     }
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
@@ -173,6 +179,7 @@ extension MainViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         print("did select item at \(indexPath)")
         
+        fullVC = FullScreenViewController(currentData: data[indexPath.row])
         let selectedCell: UICollectionViewCell = collectionView.cellForItem(at: indexPath)!
         if selectedCell.contentView.backgroundColor == UIColor.gray {
             selectedCell.contentView.backgroundColor = UIColor.clear
@@ -211,6 +218,15 @@ extension MainViewController: UICollectionViewDelegate {
 //            portraitConstraints.append(contentsOf: footerEdges)
             
             selectedCell.contentView.backgroundColor = UIColor.gray
+            
+//            guard let imageHeight = data[indexPath.row].image?.size.height else {
+//                return
+//            }
+//            if imageHeight < UIScreen.main.bounds.size.height * 0.3 {
+//                self.headerHeight.constant = imageHeight
+//            } else {
+//                self.headerHeight.constant = UIScreen.main.bounds.size.height * 0.3
+//            }
             self.headerHeight.constant = UIScreen.main.bounds.size.height * 0.3
             self.footerHeight.constant = UIScreen.main.bounds.size.height * 0.1
             UIViewPropertyAnimator(duration: 0.75, dampingRatio: 1) {
@@ -221,15 +237,12 @@ extension MainViewController: UICollectionViewDelegate {
         }
     }
     
-    
     func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
-        
         let cellToDeselect: UICollectionViewCell = collectionView.cellForItem(at: indexPath)!
         cellToDeselect.contentView.backgroundColor = UIColor.clear
     }
     
     @objc func handleTap() {
-        let fullVC = FullScreenViewController(currentData: data[1])
-        present(fullVC, animated: true, completion: nil)
+        navigationController?.pushViewController(fullVC, animated: true)
     }
 }

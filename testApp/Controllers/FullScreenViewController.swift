@@ -31,11 +31,12 @@ class FullScreenViewController: UIViewController, WKUIDelegate {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        title = currentData.imageName
         guard let myURL = URL(string: currentData.url) else {
             return
         }
         let myRequest = URLRequest(url: myURL)
         webView.load(myRequest)
+
     }
 }
