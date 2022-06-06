@@ -53,8 +53,12 @@ class DataAPI {
                     return
                 }
                 print("download finished")
-                downloadedInfo.image = UIImage(data: data)
+                guard let image = UIImage(data: data) else { return }
+                
+                downloadedInfo.image = image
+                self.saveImage(imageName: downloadedInfo.imageName, image: image)
                 completion(downloadedInfo)
+                
                 }
             }
         }
@@ -64,4 +68,39 @@ class DataAPI {
         URLSession.shared.dataTask(with: url, completionHandler: completion).resume()
     }
     
+    func saveImage(imageName: String, image: UIImage) {
+        guard let documentDirecory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first else {
+            return
+        }
+        let fileName = imageName
+        let fileURL = documentDirecory.appendingPathComponent(fileName)
+        guard let data = image.jpegData(compressionQuality: 1) else {
+            return
+        }
+        if FileManager.default.fileExists(atPath: fileURL.path) {
+            do {
+                try FileManager.default.removeItem(atPath: fileURL.path)
+                print("Removed old image")
+            } catch let removeError {
+                print("couldn't remove file at path", removeError)
+            }
+        }
+        do {
+            try data.write(to: fileURL)
+        } catch let error {
+            print("error saving file with error", error)
+        }
+    }
+    
+    func imagePath(fileName: String) -> URL? {
+        let documentDirectory = FileManager.SearchPathDirectory.documentDirectory
+        let userDomainMask = FileManager.SearchPathDomainMask.userDomainMask
+        let paths = NSSearchPathForDirectoriesInDomains(documentDirectory, userDomainMask, true)
+        
+        if let dirPath = paths.first {
+            let imageURL = URL(fileURLWithPath: dirPath).appendingPathComponent(fileName)
+            return imageURL
+        }
+        return nil
+    }
 }

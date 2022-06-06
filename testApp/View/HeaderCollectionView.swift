@@ -12,8 +12,7 @@ class HeaderCollectionView: UIView {
     let imageView: UIImageView = {
         let img = UIImageView()
         img.image = UIImage(named: "imageIcon")
-        img.contentMode = .scaleAspectFit
-         
+        img.contentMode = .scaleAspectFill
         img.clipsToBounds = true
         img.tintColor = .black
         return img
@@ -33,9 +32,6 @@ class HeaderCollectionView: UIView {
     
     func update(currentData: FullInfo) {
         imageView.image = currentData.image
-        if currentData.image != UIImage(named: "imageIcon") {
-            imageView.contentMode = .scaleAspectFill
-        }
         
     }
 }

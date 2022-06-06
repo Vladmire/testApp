@@ -8,7 +8,7 @@
 import TinyConstraints
 import WebKit
 
-class FullScreenViewController: UIViewController, WKUIDelegate {
+class FullScreenViewController: UIViewController, WKUIDelegate{
     
     private var webView: WKWebView!
     private var currentData: FullInfo
@@ -32,11 +32,30 @@ class FullScreenViewController: UIViewController, WKUIDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         title = currentData.imageName
-        guard let myURL = URL(string: currentData.url) else {
+
+        
+        guard let imagePath = DataAPI.shared.imagePath(fileName: currentData.imageName)?.absoluteString else {
             return
         }
-        let myRequest = URLRequest(url: myURL)
-        webView.load(myRequest)
-
+        var Path = imagePath
+        print(Path)
+        Path.removeFirst(4)
+        print(Path)
+        
+        let html = """
+        <html>
+            <body s>
+                <h1 style="text-align:center; font-size: 100px; font-weight: bold; color: red;">\(currentData.imageName)</h1>
+                <img src="\(currentData.url)" width=100% alt="\(currentData.url)">
+                <h1 style="text-align:center; font-size: 80px;">lat: \(currentData.lat)</h1>
+                <h1 style="text-align:center; font-size: 80px;">long: \(currentData.long)</h1>
+                <div style="text-align:center; font-size: 80px;">
+                    <a href="\(currentData.url)">link to original</a>
+                </div>
+            </body>
+        </html>
+        """
+        
+        webView.loadHTMLString(html, baseURL: nil)
     }
 }
