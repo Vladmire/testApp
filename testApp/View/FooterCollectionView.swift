@@ -36,16 +36,16 @@ class FooterCollectionView: UIView {
         addSubview(lang)
         addSubview(long)
         backgroundColor = .white
-        imageTitle.topToSuperview(offset: 15)
-        imageTitle.leftToSuperview(offset: 15)
-        
-        lang.topToBottom(of: imageTitle, offset: 15)
-        lang.leftToSuperview(offset: 15)
-        lang.bottomToSuperview(offset: -15)
-        
-        long.topToBottom(of: imageTitle, offset: 15)
-        long.leftToRight(of: lang, offset: 15)
-        long.bottomToSuperview(offset: -15)
+//        imageTitle.topToSuperview(offset: 15)
+//        imageTitle.leftToSuperview(offset: 15)
+//        
+//        lang.topToBottom(of: imageTitle, offset: 15)
+//        lang.leftToSuperview(offset: 15)
+//        lang.bottomToSuperview(offset: -15)
+//        
+//        long.topToBottom(of: imageTitle, offset: 15)
+//        long.leftToRight(of: lang, offset: 15)
+//        long.bottomToSuperview(offset: -15)
     }
     
     required init?(coder: NSCoder) {

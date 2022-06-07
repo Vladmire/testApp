@@ -23,7 +23,7 @@ class HeaderCollectionView: UIView {
         
         addSubview(imageView)
         backgroundColor = .white
-        imageView.edgesToSuperview(insets: .left(10) + .top(10) + .right(10) + .bottom(10))
+        
     }
     
     required init?(coder: NSCoder) {
@@ -32,6 +32,7 @@ class HeaderCollectionView: UIView {
     
     func update(currentData: FullInfo) {
         imageView.image = currentData.image
-        
+//        imageView.edgesToSuperview(insets: .left(10) + .top(10) + .right(10) + .bottom(10))
+        imageView.edgesToSuperview()
     }
 }

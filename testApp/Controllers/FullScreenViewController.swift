@@ -34,13 +34,13 @@ class FullScreenViewController: UIViewController, WKUIDelegate{
         title = currentData.imageName
 
         
-        guard let imagePath = DataAPI.shared.imagePath(fileName: currentData.imageName)?.absoluteString else {
-            return
-        }
-        var Path = imagePath
-        print(Path)
-        Path.removeFirst(4)
-        print(Path)
+//        guard let imagePath = DataAPI.shared.imagePath(fileName: currentData.imageName)?.absoluteString else {
+//            return
+//        }
+//        var Path = imagePath
+//        print(Path)
+//        Path.removeFirst(4)
+//        print(Path)
         
         let html = """
         <html>
