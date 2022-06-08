@@ -99,16 +99,16 @@ class MainViewController: UIViewController {
     private func changeOrientation() {
         if isPortrait {
             headerBottom.isActive = false
-            headerRight.isActive = true
-            CVPortraitTop.isActive = true
             collectionViewTop.isActive = false
-            collectionViewLeft.isActive = true
             CVLandscapeLeft.isActive = false
-            footerLeft.isActive = true
             FTLandscapeLeft.isActive = false
             headerWidth.isActive = false
+            
+            headerRight.isActive = true
+            CVPortraitTop.isActive = true
+            collectionViewLeft.isActive = true
+            footerLeft.isActive = true
             headerHeight.isActive = true
-            headerWidth.isActive = true
             if headerWidth.constant != 0 {
                 headerWidth.constant = 0
                 headerHeight.constant = UIScreen.main.bounds.size.width * 0.3
@@ -118,16 +118,19 @@ class MainViewController: UIViewController {
                 self.view.layoutIfNeeded()
             }.startAnimation()
         } else {
-            headerBottom.isActive = true
             headerRight.isActive = false
             CVPortraitTop.isActive = false
-            collectionViewTop.isActive = true
             collectionViewLeft.isActive = false
-            CVLandscapeLeft.isActive = true
             footerLeft.isActive = false
-            FTLandscapeLeft.isActive = true
-            headerWidth.isActive = true
+            
             headerHeight.isActive = false
+            headerWidth.isActive = true
+            headerBottom.isActive = true
+            collectionViewTop.isActive = true
+            CVLandscapeLeft.isActive = true
+            FTLandscapeLeft.isActive = true
+            
+            
             if headerHeight.constant != 0 {
                 headerHeight.constant = 0
                 headerWidth.constant = UIScreen.main.bounds.size.height * 0.3
@@ -140,6 +143,9 @@ class MainViewController: UIViewController {
     }
     private func createHeadFoot() {
         if isPortrait {
+            
+            
+            
             headerHeight.constant = UIScreen.main.bounds.size.height * 0.3
             footerHeight.constant = UIScreen.main.bounds.size.height * 0.1
             headerWidth.isActive = false
