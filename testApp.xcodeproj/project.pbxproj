@@ -73,8 +73,6 @@
 		6925E08E283CD21200937655 /* testApp */ = {
 			isa = PBXGroup;
 			children = (
-				6925E0AB283CE4D600937655 /* Extensions */,
-				6925E0A9283CE4AE00937655 /* Helpers */,
 				6925E0A8283CE4A100937655 /* DataManager */,
 				6925E0A6283CE46F00937655 /* Controllers */,
 				6925E0A7283CE47C00937655 /* View */,
@@ -121,20 +119,6 @@
 				6925E0AE283CE5AA00937655 /* DataAPI.swift */,
 			);
 			path = DataManager;
-			sourceTree = "<group>";
-		};
-		6925E0A9283CE4AE00937655 /* Helpers */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = Helpers;
-			sourceTree = "<group>";
-		};
-		6925E0AB283CE4D600937655 /* Extensions */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = Extensions;
 			sourceTree = "<group>";
 		};
 		6FF4D9C2C38FD9730A23132D /* Frameworks */ = {

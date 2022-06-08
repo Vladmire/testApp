@@ -26,36 +26,39 @@ class FullScreenViewController: UIViewController, WKUIDelegate{
         let webConfiguration = WKWebViewConfiguration()
         webView = WKWebView(frame: .zero, configuration: webConfiguration)
         webView.uiDelegate = self
+        webView.navigationDelegate = self
         view = webView
     }
 
     override func viewDidLoad() {
         super.viewDidLoad()
         title = currentData.imageName
-
-        
-//        guard let imagePath = DataAPI.shared.imagePath(fileName: currentData.imageName)?.absoluteString else {
-//            return
-//        }
-//        var Path = imagePath
-//        print(Path)
-//        Path.removeFirst(4)
-//        print(Path)
-        
         let html = """
         <html>
-            <body s>
+            <body>
                 <h1 style="text-align:center; font-size: 100px; font-weight: bold; color: red;">\(currentData.imageName)</h1>
-                <img src="\(currentData.url)" width=100% alt="\(currentData.url)">
-                <h1 style="text-align:center; font-size: 80px;">lat: \(currentData.lat)</h1>
-                <h1 style="text-align:center; font-size: 80px;">long: \(currentData.long)</h1>
-                <div style="text-align:center; font-size: 80px;">
+                <div style="text-align:center;font-size: 80px;">
                     <a href="\(currentData.url)">link to original</a>
                 </div>
+                <img src="\(currentData.url)" width=100% alt="">
+                <h2 style="text-align:center;font-size: 80px;">lat: \(currentData.lat)</h2>
+                <h2 style="text-align:center;font-size: 80px;">long: \(currentData.long)</h2
             </body>
         </html>
         """
-        
         webView.loadHTMLString(html, baseURL: nil)
     }
+}
+
+extension FullScreenViewController: WKNavigationDelegate {
+    func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction, decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
+            guard case .linkActivated = navigationAction.navigationType,
+                  let url = navigationAction.request.url
+            else {
+                decisionHandler(.allow)
+                return
+            }
+            decisionHandler(.cancel)
+            UIApplication.shared.open(url)
+       }
 }

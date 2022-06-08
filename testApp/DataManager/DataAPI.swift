@@ -54,11 +54,9 @@ class DataAPI {
                 }
                 print("download finished")
                 guard let image = UIImage(data: data) else { return }
-                
                 downloadedInfo.image = image
                 self.saveImage(imageName: downloadedInfo.imageName, image: image)
                 completion(downloadedInfo)
-                
                 }
             }
         }
@@ -101,9 +99,7 @@ class DataAPI {
             let imageUrl = URL(fileURLWithPath: dirPath).appendingPathComponent(fileName)
             let image = UIImage(contentsOfFile: imageUrl.path)
             return image
-
         }
-
         return nil
     }
 }
