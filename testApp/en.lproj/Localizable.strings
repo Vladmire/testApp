@@ -1,0 +1,12 @@
+/* 
+  Localizable.strings
+  
+
+  Created by imac44 on 09.06.2022.
+  
+*/
+"latitude" = "latitude";
+"longitude" = "longitude";
+"Main screen" = "Main screen";
+"Oops" = "Oops";
+"No Ethernet connection!" = "No Ethernet connection!";

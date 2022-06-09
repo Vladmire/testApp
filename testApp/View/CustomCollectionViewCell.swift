@@ -28,11 +28,6 @@ class CustomCollectionViewCell: UICollectionViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
-//    override func prepareForReuse() {
-//        super.prepareForReuse()
-//        task.cancel()
-//    }
-    
     func update(data: FullInfo, completion: @escaping(FullInfo) -> ()) {
         var data = data
         image.image = data.image
@@ -49,8 +44,6 @@ class CustomCollectionViewCell: UICollectionViewCell {
             data.image = downloadedImage
             completion(data)
         }
-        
-    
         image.tintColor = .black
     }
 }

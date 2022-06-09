@@ -10,22 +10,19 @@ import TinyConstraints
 class FooterCollectionView: UIView {
 
     let imageTitle: UILabel = {
-       let label = UILabel()
-        label.text = "title"
+        let label = UILabel()
         label.numberOfLines = 0
         return label
     }()
 
     let lang: UILabel = {
-       let label = UILabel()
-        label.text = "lang: 123"
+        let label = UILabel()
         label.numberOfLines = 0
         return label
     }()
     
     let long: UILabel = {
-       let label = UILabel()
-        label.text = "long: 123"
+        let label = UILabel()
         label.numberOfLines = 0
         return label
     }()
@@ -54,7 +51,9 @@ class FooterCollectionView: UIView {
     
     func update(data: FullInfo) {
         imageTitle.text = data.imageName
-        lang.text = "lang: \(String(data.lat))"
-        long.text = "long: \(String(data.long))"
+        let latText = NSLocalizedString("latitude", comment: "")
+        let longText = NSLocalizedString("longitude", comment: "")
+        lang.text = "\(latText): \(String(data.lat))"
+        long.text = "\(longText): \(String(data.long))"
     }
 }

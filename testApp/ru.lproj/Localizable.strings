@@ -1,0 +1,12 @@
+/* 
+  Localizable.strings
+  
+
+  Created by imac44 on 09.06.2022.
+  
+*/
+"latitude" = "Долгота";
+"longitude" = "Широта";
+"Main screen" = "Главный экран";
+"Oops" = "Упс";
+"No Ethernet connection!" = "Нет интернет подключения!";

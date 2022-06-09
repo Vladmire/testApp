@@ -46,13 +46,11 @@ class DataAPI {
         var downloadedInfo = data
         if let url = URL(string: data.url) {
             DispatchQueue.global(qos: .utility).async {
-            print("download started")
             self.getData(from: url) { data, response, error in
                 guard let data = data, error == nil else {
                     print("download failed")
                     return
                 }
-                print("download finished")
                 guard let image = UIImage(data: data) else { return }
                 downloadedInfo.image = image
                 self.saveImage(imageName: downloadedInfo.imageName, image: image)
@@ -86,7 +84,7 @@ class DataAPI {
         do {
             try data.write(to: fileURL)
         } catch let error {
-            print("error saving file with error", error)
+            print("error saving file with ", error)
         }
     }
     

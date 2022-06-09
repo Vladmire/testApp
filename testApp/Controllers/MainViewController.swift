@@ -7,7 +7,6 @@
 
 import TinyConstraints
 import Network
-import UIKit
 
 class MainViewController: UIViewController {
     // data
@@ -52,38 +51,15 @@ class MainViewController: UIViewController {
     
     private var portraitConstraints: Constraints!
     private var landscapeConstraints: Constraints!
+    private var initHeadFootPort: Constraints!
+    private var initHeadFootLand: Constraints!
     
     // MARK: - Helpers
     override func viewDidLoad() {
         super.viewDidLoad()
-        title = "Main screen"
+        title = NSLocalizedString("Main screen", comment: "")
         setupViews()
         checkConnection()
-    }
-
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        if let orientation = self.view.window?.windowScene?.interfaceOrientation {
-            if orientation == .portrait || orientation == .portraitUpsideDown {
-                isPortrait = true
-                changeOrientation()
-            }
-            if orientation == .landscapeLeft || orientation == .landscapeRight{
-                isPortrait = false
-                changeOrientation()
-            }
-        }
-    }
-    
-    override func willTransition(to newCollection: UITraitCollection, with coordinator: UIViewControllerTransitionCoordinator) {
-        if UIDevice.current.orientation{
-            isPortrait = true
-            changeOrientation()
-        }
-        if UIDevice.current.orientation.isLandscape {
-            isPortrait = false
-            changeOrientation()
-        }
     }
     
     private func checkConnection(){
@@ -91,7 +67,8 @@ class MainViewController: UIViewController {
             if path.status == .satisfied {
                 print("We're connected!")
             } else {
-                let alertController = UIAlertController(title: "Oops", message: "No Ethernet connection!", preferredStyle: .alert)
+                let alertController = UIAlertController(title: NSLocalizedString("Oops", comment: ""), message: NSLocalizedString("No Ethernet connection!",
+                    comment: ""), preferredStyle: .alert)
                 let alertAction = UIAlertAction(title: "OK", style: .default, handler: nil)
                 alertController.addAction(alertAction)
                 self.present(alertController, animated: true, completion: nil)
@@ -102,72 +79,64 @@ class MainViewController: UIViewController {
         monitor.start(queue: queue)
     }
     
-    private func changeOrientation() {
-        if isPortrait {
-            if CVPortraitTop.isActive {
-                headerRight.isActive = false
-                headerHeight.isActive = false
-                CVPortraitTop.isActive = false
-                collectionViewLeft.isActive = false
-                footerLeft.isActive = false
-                
-                headerWidth.constant = UIScreen.main.bounds.size.width * 0.3
-                footerHeight.constant = UIScreen.main.bounds.size.width * 0.1
-                headerBottom.isActive = true
-                headerWidth.isActive = true
-                
-                collectionViewTop.isActive = true
-                CVLandscapeLeft.isActive = true
-                
-                FTLandscapeLeft.isActive = true
-    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        if let orientation = self.view.window?.windowScene?.interfaceOrientation {
+            if orientation == .portrait || orientation == .portraitUpsideDown {
+                isPortrait = true
             }
-            UIViewPropertyAnimator(duration: 0.75, dampingRatio: 1) {
-                self.view.layoutIfNeeded()
-            }.startAnimation()
-        } else {
-            portraitConstraints.deActivate()
-            landscapeConstraints.activate()
-            if headerHeight.constant != 0 {
-                headerHeight.constant = 0
-                headerWidth.constant = UIScreen.main.bounds.size.height * 0.3
-                footerHeight.constant = UIScreen.main.bounds.size.height * 0.1
+            if orientation == .landscapeLeft || orientation == .landscapeRight{
+                isPortrait = false
             }
-            UIViewPropertyAnimator(duration: 0.75, dampingRatio: 1) {
-                self.view.layoutIfNeeded()
-            }.startAnimation()
         }
     }
+
     
+    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        super.traitCollectionDidChange(previousTraitCollection)
+        if traitCollection.verticalSizeClass == .regular {
+            isPortrait = true
+            if CVLandscapeLeft.isActive {
+                landscapeConstraints.deActivate()
+                portraitConstraints.activate()
+            }
+        }
+        if traitCollection.verticalSizeClass == .compact {
+            isPortrait = false
+            if CVPortraitTop.isActive {
+                portraitConstraints.deActivate()
+                landscapeConstraints.activate()
+            }
+        }
+    }
+
     private func createHeadFoot() {
         if isPortrait {
             collectionViewTop.isActive = false
             collectionViewBottom.isActive = false
             
+            headerWidth.constant = UIScreen.main.bounds.size.height * 0.3
             headerHeight.constant = UIScreen.main.bounds.size.height * 0.3
             footerHeight.constant = UIScreen.main.bounds.size.height * 0.1
-            headerHeight.isActive = true
-            footerHeight.isActive = true
-            CVPortraitTop.isActive = true
-            CVchangeBottom.isActive = true
+    
+            initHeadFootPort.activate()
+            
             headerView.isHidden = false
             footerView.isHidden = false
         } else {
             headerView.isHidden = false
             footerView.isHidden = false
+            
             collectionViewLeft.isActive = false
             collectionViewBottom.isActive = false
             headerRight.isActive  = false
+            footerLeft.isActive  = false
             
+            headerHeight.constant = UIScreen.main.bounds.size.width * 0.3
             headerWidth.constant = UIScreen.main.bounds.size.width * 0.3
             footerHeight.constant = UIScreen.main.bounds.size.width * 0.1
-            headerBottom.isActive = true
-            headerWidth.isActive = true
-            CVchangeBottom.isActive = true
-            footerLeft.isActive  = false
-            footerHeight.isActive = true
-            CVLandscapeLeft.isActive = true
-            FTLandscapeLeft.isActive = true
+            
+            initHeadFootLand.activate()
         }
         UIViewPropertyAnimator(duration: 0.5, dampingRatio: 1) {
             self.view.layoutIfNeeded()
@@ -176,27 +145,17 @@ class MainViewController: UIViewController {
     
     private func deleteHedFoot() {
         if isPortrait {
-            headerHeight.isActive = false
-            footerHeight.isActive = false
-            CVPortraitTop.isActive = false
-            CVchangeBottom.isActive = false
-        
-            headerHeight.constant = 100
-            footerHeight.constant = 100
-            collectionViewTop.isActive = true
-            collectionViewBottom.isActive = true
+            headerWidth.isActive = false
+            initHeadFootPort.deActivate()
+            
             headerView.isHidden = true
             footerView.isHidden = true
-        } else {
-            headerBottom.isActive = false
-            headerWidth.isActive = false
-            CVchangeBottom.isActive = false
-            footerHeight.isActive = false
-            CVLandscapeLeft.isActive = false
-            FTLandscapeLeft.isActive = false
+            collectionViewTop.isActive = true
+            collectionViewBottom.isActive = true
             
-            headerWidth.constant = 100
-            footerHeight.constant = 100
+        } else {
+            headerHeight.isActive = false
+            initHeadFootLand.deActivate()
             
             headerView.isHidden = true
             footerView.isHidden = true
@@ -223,8 +182,6 @@ class MainViewController: UIViewController {
         collectionView.delegate = self
         collectionView.register(CustomCollectionViewCell.self, forCellWithReuseIdentifier: cellIdentifier)
         
-        
-        
         headerHeight = headerView.height(100, isActive: false)
         headerWidth = headerView.width(100, isActive: false)
         footerHeight = footerView.height(100, isActive: false)
@@ -243,11 +200,13 @@ class MainViewController: UIViewController {
         CVLandscapeLeft = collectionView.leftToRight(of: headerView, isActive: false)
         CVPortraitTop = collectionView.topToBottom(of: headerView, isActive: false)
 
-        
         footerLeft = footerView.leftToSuperview(usingSafeArea: true)
         footerBottom = footerView.bottomToSuperview(usingSafeArea: true)
         footerRight = footerView.rightToSuperview(usingSafeArea: true)
         FTLandscapeLeft = footerView.leftToRight(of: headerView, isActive: false)
+        
+        initHeadFootPort = [headerHeight, footerHeight, CVPortraitTop, CVchangeBottom]
+        initHeadFootLand = [headerBottom, headerWidth, CVchangeBottom, footerHeight, CVLandscapeLeft, FTLandscapeLeft]
         
         portraitConstraints = [headerRight, CVPortraitTop, collectionViewLeft, footerLeft, headerHeight]
         landscapeConstraints = [collectionViewTop,  CVLandscapeLeft, headerBottom, FTLandscapeLeft, headerWidth]
@@ -298,7 +257,6 @@ extension MainViewController: UICollectionViewDelegateFlowLayout {
 
 extension MainViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        print("did select item at \(indexPath)")
         fullVC = FullScreenViewController(currentData: data[indexPath.row])
         let selectedCell: UICollectionViewCell = collectionView.cellForItem(at: indexPath)!
             if selectedCell.contentView.backgroundColor == UIColor.gray {
